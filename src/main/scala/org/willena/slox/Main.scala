@@ -9,5 +9,5 @@ object Main:
     val bytes = Files.readAllBytes(Paths.get(path))
     exec(String(bytes, Charset.defaultCharset()))
 
-  private def exec(source: String) = ???
-    
+  private def exec(source: String) =
+    val tokens = Scanner(source).scanTokens
