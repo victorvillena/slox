@@ -1,0 +1,3 @@
+* slox
+
+Implementation of Lox written in Scala.
