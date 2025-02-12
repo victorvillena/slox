@@ -6,7 +6,7 @@ class Scanner(val source: String):
 
   // State /////////////////////////////////////////////////////////////////////
 
-  private var currentLine = 0
+  private var currentLine = 1
 
   private var currentCharIndex = 0
   private var tokenStartIndex  = 0
