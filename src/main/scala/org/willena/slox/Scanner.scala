@@ -86,7 +86,7 @@ class Scanner(val source: String):
           if peek() == '\n' then
             currentLine += 1 // multiline strings are valid, but the line counter needs to be updated
           advance
-        if endOfSource() then return Lox.error(currentLine, "Unterminated string.") // TODO might not work
+        if endOfSource() then return Lox.error(currentLine, "Unterminated string.")
         advance // consume the closing " after peeking it
         addToken(String, source.substring(tokenStartIndex + 1, currentCharIndex - 1)) // string, without quotes
 
