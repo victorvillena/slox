@@ -18,12 +18,14 @@ class LoxFunction(declaration: Statement.Function, closure: Environment, isInit:
 
     // TODO this might be much clearer if the return used a concrete type instead of a null
     Try(interpreter.executeBlock(declaration.body, environment)).fold(
-      { case returnValue: Return =>
-        if isInit then
-          // Only value-less returns in initializers reach this. Returns with values in initializers are caught by the
-          // resolver.
-          closure.getAt(0, "this")
-        else returnValue.value
+      {
+        case returnValue: Return =>
+          if isInit then
+            // Only value-less returns in initializers reach this. Returns with values in initializers are caught by the
+            // resolver.
+            closure.getAt(0, "this")
+          else returnValue.value
+        case e => throw e
       },
       { _ =>
         // Make init methods always return 'this' when called
