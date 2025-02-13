@@ -38,4 +38,4 @@ object Lox:
 
     if hadError then return
 
-    Interpreter().interpret(statements)
+    interpreter.interpret(statements)

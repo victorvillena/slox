@@ -138,7 +138,7 @@ class Resolver(val interpreter: Interpreter):
       case Expression.Unary(operator, right) =>
         resolve(right)
       case Expression.Variable(name) =>
-        if scopes.nonEmpty && !scopes.top(name.lexeme) then
+        if scopes.nonEmpty && !scopes.top.getOrElse(name.lexeme, true) then
           Lox.error(name, "Can't read local variable in its own initializer.")
         resolveLocal(expression, name)
 
