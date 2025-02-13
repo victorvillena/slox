@@ -1,20 +1,25 @@
 package org.willena.slox
 
+import scala.annotation.tailrec
+
 class LoxClass(val name: String, superclass: LoxClass, methods: Map[String, LoxFunction]) extends LoxCallable:
 
-  // TODO maybe return Option?
-  def findMethod(name: String): LoxFunction =
-    methods
-      .get(name)
-      .orElse(Option(superclass).map(_.findMethod(name)))
-      .orNull
+  @tailrec
+  final def findMethod(name: String): Option[LoxFunction] =
+    methods.get(name) match
+      case method @ Some(_) => method
+      case None =>
+        Option(superclass) match
+          case None         => None
+          case Some(sclass) => sclass.findMethod(name)
 
-  override def arity: Int = Option(findMethod("init")).map(_.arity).getOrElse(0)
+  override def arity: Int = findMethod("init") match
+    case Some(method) => method.arity
+    case None         => 0
 
   override def call(interpreter: Interpreter, arguments: Seq[Any]): Any =
     val instance = LoxInstance(this)
-    Option(findMethod("init")).foreach(_.bind(instance).call(interpreter, arguments))
+    findMethod("init").foreach(_.bind(instance).call(interpreter, arguments))
     instance
-    
 
   override def toString: String = name

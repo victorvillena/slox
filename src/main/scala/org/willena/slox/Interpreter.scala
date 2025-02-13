@@ -143,9 +143,9 @@ class Interpreter:
         val superclass = environment.getAt(distance, "super").asInstanceOf[LoxClass]
         val obj        = environment.getAt(distance - 1, "this").asInstanceOf[LoxInstance]
 
-        val superMethod = superclass.findMethod(method.lexeme)
-        if superMethod == null then throw RuntimeError(method, s"Undefined property '${method.lexeme}'.")
-        else superMethod.bind(obj)
+        superclass.findMethod(method.lexeme) match
+          case None => throw RuntimeError(method, s"Undefined property '${method.lexeme}'.")
+          case Some(m) => m.bind(obj)
 
       case Expression.This(keyword) => lookupVariable(keyword, expression)
 
