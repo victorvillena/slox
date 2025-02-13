@@ -134,7 +134,7 @@ class Interpreter:
           case instance: LoxInstance =>
             val setValue = evaluate(value)
             instance.set(name, setValue)
-            value
+            setValue
           case _ =>
             throw RuntimeError(name, "Only instances have fields.")
 
