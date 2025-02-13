@@ -28,6 +28,7 @@ class Environment(val enclosing: Environment = null):
       // definition would create a variable in the current environment, but plain assignment
       // uses the outer env's variables. This is how global vars work.
       enclosing.assign(name, value)
+    else throw RuntimeError(name, s"Undefined variable '${name.lexeme}'.")
 
   @tailrec
   private def ancestor(distance: Int): Environment =
