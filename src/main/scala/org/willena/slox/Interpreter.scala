@@ -8,6 +8,14 @@ class Interpreter:
   private var environment = globals
   private val locals      = mutable.HashMap[Expression, Int]()
 
+  globals.define(
+    "clock",
+    new LoxCallable:
+      override def arity: Int                                          = 0
+      override def toString: String                                    = "<native fn>"
+      override def call(interpreter: Interpreter, arguments: Seq[Any]) = System.currentTimeMillis() / 1000.0,
+  )
+
   def resolve(expression: Expression, depth: Int) = locals.update(expression, depth)
 
   // Helpers ///////////////////////////////////////////////////////////////////
