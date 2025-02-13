@@ -17,22 +17,17 @@ class LoxFunction(declaration: Statement.Function, closure: Environment, isInit:
         environment.define(param.lexeme, arg)
 
     // TODO this might be much clearer if the return used a concrete type instead of a null
-    Try(interpreter.executeBlock(declaration.body, environment)).fold(
-      {
-        case returnValue: Return =>
-          if isInit then
-            // Only value-less returns in initializers reach this. Returns with values in initializers are caught by the
-            // resolver.
-            closure.getAt(0, "this")
-          else returnValue.value
-        case e => throw e
-      },
-      { _ =>
-        // Make init methods always return 'this' when called
-        if isInit then closure.getAt(0, "this")
-        else null
-      },
-    )
+    var returnValue: Any = null
+    try
+      interpreter.executeBlock(declaration.body, environment)
+      if isInit then returnValue = closure.getAt(0, "this")
+    catch
+      case value: Return =>
+        returnValue = if isInit then
+          closure.getAt(0, "this") // value-less return in initializer (if there's a value it's an error)
+        else value.value
+
+    returnValue
 
   override def arity: Int = declaration.params.length
 
