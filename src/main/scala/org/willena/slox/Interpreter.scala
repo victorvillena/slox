@@ -38,7 +38,7 @@ class Interpreter:
   private def checkNumberOperands(operator: Token, a: Any, b: Any) =
     (a, b) match
       case (d1: Double, d2: Double) => (d1, d2)
-      case _                        => throw RuntimeError(operator, "Operands must be two numbers or two strings.")
+      case _                        => throw RuntimeError(operator, "Operands must be numbers.")
 
   //////////////////////////////////////////////////////////////////////////////
 
@@ -178,7 +178,7 @@ class Interpreter:
           .toMap
 
         val loxClass = LoxClass(name.lexeme, superclass, methodsMap)
-        
+
         if superclassVariable != null then environment = environment.enclosing
 
         environment.assign(name, loxClass)

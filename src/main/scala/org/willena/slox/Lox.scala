@@ -17,7 +17,7 @@ object Lox:
     hadError = true
 
   def runtimeError(error: RuntimeError) =
-    Console.err.println(s"${error.getMessage} \n[line ${error.token.line}]")
+    Console.err.println(s"${error.getMessage}\n[line ${error.token.line}]")
     hadRuntimeError = true
 
   // Named this way to allow for a "slox run" command
