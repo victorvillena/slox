@@ -18,7 +18,7 @@ class Environment(val enclosing: Environment = null):
     values
       .get(name.lexeme)
       .orElse(Option(enclosing).map(_.get(name)))
-      .getOrElse(throw RuntimeError(name, s"Undefined variable '${name.lexeme}'.'"))
+      .getOrElse(throw RuntimeError(name, s"Undefined variable '${name.lexeme}'."))
 
   @tailrec
   final def assign(name: Token, value: Any): Unit =
