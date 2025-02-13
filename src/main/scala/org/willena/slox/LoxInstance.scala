@@ -10,7 +10,7 @@ class LoxInstance(klass: LoxClass):
     fields
       .get(name.lexeme)
       .orElse(Option(klass.findMethod(name.lexeme)).map(_.bind(this)))
-      .getOrElse(throw RuntimeError(name, s"Undefined property '${name.lexeme}'.'"))
+      .getOrElse(throw RuntimeError(name, s"Undefined property '${name.lexeme}'."))
 
   def set(name: Token, value: Any) = fields.update(name.lexeme, value)
 
