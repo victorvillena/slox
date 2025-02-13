@@ -259,14 +259,14 @@ class Parser(val tokens: Seq[Token]):
 
     // Desugaring of for loop into while loop
     if increment != null then
-      body = s.Block(Seq(body, s.ExpressionStatement(increment)))
+      body = s.Block(Array(body, s.ExpressionStatement(increment)))
     if condition == null then
       condition = e.Literal(true)
 
     body = s.While(condition, body)
 
     if initializer != null then
-      body = s.Block(Seq(initializer, body))
+      body = s.Block(Array(initializer, body))
 
     body
 

@@ -5,7 +5,7 @@ import scala.collection.mutable
 
 class Environment(val enclosing: Environment = null):
 
-  private val values = mutable.Map[String, Any]()
+  private val values: mutable.Map[String, Any] = mutable.HashMap.empty
 
   def define(name: String, value: Any) = values.put(name, value)
 

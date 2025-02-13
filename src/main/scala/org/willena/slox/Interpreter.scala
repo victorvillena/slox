@@ -6,7 +6,7 @@ class Interpreter:
 
   val globals             = Environment()
   private var environment = globals
-  private val locals      = mutable.HashMap[Expression, Int]()
+  private val locals: mutable.Map[Expression, Int] = mutable.AnyRefMap.empty
 
   globals.define(
     "clock",
