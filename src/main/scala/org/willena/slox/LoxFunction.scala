@@ -34,4 +34,4 @@ class LoxFunction(declaration: Statement.Function, closure: Environment, isInit:
 
   override def arity: Int = declaration.params.length
 
-  override def toString: String = s"<fn ${declaration.name.lexeme} >"
+  override def toString: String = s"<fn ${declaration.name.lexeme}>"
