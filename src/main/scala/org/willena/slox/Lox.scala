@@ -11,9 +11,11 @@ object Lox:
 
   def error(in: Token | Int, message: String) =
     val (line, location) = in match
-      case t: Token => (t.line, if t.tpe == TokenType.Eof then "end" else s"'${t.lexeme}'")
+      case t: Token =>
+        val where = if t.tpe == TokenType.Eof then "end" else s"'${t.lexeme}'"
+        (t.line, s" at $where")
       case l: Int   => (l, "")
-    Console.err.println(s"[line $line] Error at $location: $message") // GAIN no 'report' helper
+    Console.err.println(s"[line $line] Error$location: $message") // GAIN no 'report' helper
     hadError = true
 
   def runtimeError(error: RuntimeError) =
