@@ -14,6 +14,7 @@ class LoxClass(val name: String, superclass: LoxClass, methods: Map[String, LoxF
   override def call(interpreter: Interpreter, arguments: Seq[Any]): Any =
     val instance = LoxInstance(this)
     Option(findMethod("init")).foreach(_.bind(instance).call(interpreter, arguments))
+    instance
     
 
   override def toString: String = name
