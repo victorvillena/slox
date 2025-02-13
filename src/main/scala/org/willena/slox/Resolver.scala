@@ -143,7 +143,6 @@ class Resolver(val interpreter: Interpreter):
         resolveLocal(expression, name)
 
   private def resolveLocal(expression: Expression, name: Token) =
-    // TODO confirm if stacks index from zero instead of from the end like in Java
     val depth = scopes.indexWhere(_.contains(name.lexeme))
     if depth >= 0 then interpreter.resolve(expression, depth)
 

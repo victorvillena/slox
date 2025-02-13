@@ -39,7 +39,7 @@ class Scanner(val source: String):
 
   private def isAlphanumeric(c: Char) = isDigit(c) || isAlpha(c)
 
-  private def addToken(tpe: TokenType, literal: Any = null) = // GAIN default params avoid overloading
+  private def addToken(tpe: TokenType, literal: LiteralValue = null) = // GAIN default params avoid overloading
     val text = source.substring(tokenStartIndex, currentCharIndex)
     tokens += Token(tpe, text, literal, currentLine)
 

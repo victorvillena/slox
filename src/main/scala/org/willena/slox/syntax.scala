@@ -8,7 +8,7 @@ enum Expression:
   case Call(callee: Expression, paren: Token, arguments: Seq[Expression])
   case Get(obj: Expression, name: Token)
   case Grouping(expr: Expression)
-  case Literal(value: Any) // TODO look for a more suitable type
+  case Literal(value: LiteralValue)
   case Logical(left: Expression, operator: Token, right: Expression)
   case Set(obj: Expression, name: Token, value: Expression)
   case Super(keyword: Token, method: Token)
