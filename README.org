@@ -1,3 +1,56 @@
 * slox
 
-Implementation of Lox written in Scala.
+Implementation of Lox written in Scala 3. I based it on the Java implementation
+shown in the first half of [[https://craftinginterpreters.com/][Crafting Interpreters]].
+
+This is a straigtforward port of ~jlox~. I didn't change the design of the Lox
+data types or the overall interpreter architecture. This means there are nulls
+and some mutable global state. It does not matter for now, my goal was to check
+out the experience of writing the same interpreter using Scala.
+
+** Requirements
+- A JVM
+- A recent-ish version of sbt
+
+** Usage
+This is a sbt project. It can be run with ~sbt run~ and a JAR file can be
+compiled with ~sbt assembly~. Implementation tests are done using [[https://github.com/victorvillena/loxtester][loxtester]].
+
+The slox app itself takes an argument, a path to a .lox file. REPL is not
+implemented.
+
+** slox vs jlox
+
+- *Smaller codebase*: ~slox~ is 45% the size of ~jlox~.
+- *No Visitor pattern*: Pattern matching does the job better.
+- *No code generation*: Not having to weave a complex pattern into the syntax
+  tree classes means all code can be easily hand-written.
+- *Comparable speed*: Even if speed is not the goal of these interpreted-based
+  implementations, it's important to note ~slox~ does not achieve the goals
+  above at the cost of performance. The benchmarks show that ~slox~ and ~jlox~
+  are similar in performance.
+
+** Version history
+- 1.1 - some performance optimization
+- 1.0 - first complete implementation
+
+** Notes on performance
+
+The table below shows some unscientific benchmarks I did just to help me
+understand the performance characteristics of my Lox implementations. It isn't
+surprising to see ~clox~ being the overall fastest, but the interpreters are
+surprisingly close on some of these tests. Between the interpreters, ~slox~
+doesn't fall behind ~jlox~ by much, and even manages to score some big wins.
+
+|                 | jlox   | clox  | slox 1.0 | slox 1.1 |
+| binary_trees    | 5,064  | 3,186 | 5,299    | 5,258    |
+| equality        | 2,547  | 3,897 | 3,109    | 3,043    |
+| fib             | 6,193  | 2,755 | 7,105    | 6,682    |
+| instantiation   | 0,831  | 1,251 | 1,285    | 0,853    |
+| invocation      | 0,784  | 0,866 | 1,398    | 1,011    |
+| method_call     | 1,139  | 0,493 | 1,471    | 1,421    |
+| properties      | 3,448  | 1,343 | 4,370    | 3,656    |
+| string_equality | 2,640  |       | 2,117    | 1,907    |
+| trees           | 16,189 | 6,356 | 13,314   | 12,710   |
+| zoo             | 3,201  | 1,064 | 3,213    | 2,712    |
+| zoo_batch       | 491    | 1492  | 546      | 595      |
