@@ -22,11 +22,8 @@ class Parser(val tokens: Seq[Token]):
     if !atEnd then current += 1
     previous
 
-  private def check(tpe: TokenType) = !atEnd && peek.tpe == tpe // TODO change if I merge Token and TokenType
+  private def check(tpe: TokenType) = !atEnd && peek.tpe == tpe
 
-  // TODO I'd rather use pattern matching to check for token types
-  //  - that way I don't need varargs
-  //  - think how to decouple the type check from the 'advance'
   private def matches(types: TokenType*) =
     if types.exists(check) then
       advance
@@ -69,7 +66,7 @@ class Parser(val tokens: Seq[Token]):
     catch
       case error: ParseError =>
         synchronize()
-        null // TODO null!
+        null
 
   private def statement: Statement =
     if matches(For) then forStatement
@@ -258,15 +255,12 @@ class Parser(val tokens: Seq[Token]):
     var body = statement
 
     // Desugaring of for loop into while loop
-    if increment != null then
-      body = s.Block(Array(body, s.ExpressionStatement(increment)))
-    if condition == null then
-      condition = e.Literal(true)
+    if increment != null then body = s.Block(Array(body, s.ExpressionStatement(increment)))
+    if condition == null then condition = e.Literal(true)
 
     body = s.While(condition, body)
 
-    if initializer != null then
-      body = s.Block(Array(initializer, body))
+    if initializer != null then body = s.Block(Array(initializer, body))
 
     body
 

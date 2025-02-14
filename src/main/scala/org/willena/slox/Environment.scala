@@ -11,7 +11,6 @@ class Environment(val enclosing: Environment = null):
 
   def getAt(distance: Int, name: String) = ancestor(distance).values(name)
 
-  // TODO isn't this a generalized 'define'? why a separate 'define'?
   def assignAt(distance: Int, name: Token, value: Any) = ancestor(distance).values.put(name.lexeme, value)
 
   @tailrec

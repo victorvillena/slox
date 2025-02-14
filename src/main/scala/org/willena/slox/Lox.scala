@@ -5,7 +5,6 @@ import java.nio.file.{Files, Paths}
 
 object Lox:
 
-  // TODO ew global mutable state
   private var hadError        = false
   private var hadRuntimeError = false
 
@@ -14,15 +13,14 @@ object Lox:
       case t: Token =>
         val where = if t.tpe == TokenType.Eof then "end" else s"'${t.lexeme}'"
         (t.line, s" at $where")
-      case l: Int   => (l, "")
-    Console.err.println(s"[line $line] Error$location: $message") // GAIN no 'report' helper
+      case l: Int => (l, "")
+    Console.err.println(s"[line $line] Error$location: $message")
     hadError = true
 
   def runtimeError(error: RuntimeError) =
     Console.err.println(s"${error.getMessage}\n[line ${error.token.line}]")
     hadRuntimeError = true
 
-  // Named this way to allow for a "slox run" command
   @main def run(path: String) =
     val bytes = Files.readAllBytes(Paths.get(path))
     exec(String(bytes, Charset.defaultCharset()))

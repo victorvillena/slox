@@ -20,17 +20,17 @@ enum Statement:
   case Block(statements: Seq[Statement])
   case Class(
       name: Token,
-      superclass: Variable, // TODO superclass is null when there's no superclass
+      superclass: Variable, // superclass is null when there's no superclass
       methods: Seq[Function],
-  ) 
+  )
   case ExpressionStatement(expression: Expression)
   case Function(name: Token, params: Seq[Token], body: Seq[Statement])
   case If(
       condition: Expression,
       thenBranch: Statement,
-      elseBranch: Statement, // TODO elseBranch is null when there's no else condition
+      elseBranch: Statement, // elseBranch is null when there's no else condition
   )
   case Print(expression: Expression)
-  case Return(keyword: Token, value: Expression) // TODO value is null when there's no return value
-  case Var(name: Token, initializer: Expression) // TODO initializer is null when the variable is just declared
+  case Return(keyword: Token, value: Expression) // value is null when there's no return value
+  case Var(name: Token, initializer: Expression) // initializer is null when the variable is just declared
   case While(condition: Expression, body: Statement)

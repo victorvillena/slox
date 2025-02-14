@@ -3,7 +3,7 @@ package org.willena.slox
 import scala.collection.mutable
 
 class LoxInstance(klass: LoxClass):
- 
+
   private val fields: mutable.Map[String, Any] = mutable.HashMap.empty
 
   def get(name: Token) =

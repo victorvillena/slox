@@ -4,8 +4,8 @@ import scala.collection.mutable
 
 class Interpreter:
 
-  val globals             = Environment()
-  private var environment = globals
+  val globals                                      = Environment()
+  private var environment                          = globals
   private val locals: mutable.Map[Expression, Int] = mutable.AnyRefMap.empty
 
   globals.define(
@@ -23,7 +23,7 @@ class Interpreter:
   private def stringify(obj: Any) =
     obj match
       case null      => "nil"
-      case d: Double => d.toString.stripSuffix(".0") // GAIN Scala stdlib goodies
+      case d: Double => d.toString.stripSuffix(".0")
       case _         => obj.toString
 
   private def isEqual(a: Any, b: Any) =
@@ -53,8 +53,6 @@ class Interpreter:
   def interpret(statements: Seq[Statement]) =
     try statements.foreach(execute)
     catch case error: RuntimeError => Lox.runtimeError(error)
-
-  // GAIN All that complex visitor pattern setup turns into simple pattern matching
 
   private def evaluate(expression: Expression): Any =
     expression match
@@ -144,7 +142,7 @@ class Interpreter:
         val obj        = environment.getAt(distance - 1, "this").asInstanceOf[LoxInstance]
 
         superclass.findMethod(method.lexeme) match
-          case None => throw RuntimeError(method, s"Undefined property '${method.lexeme}'.")
+          case None    => throw RuntimeError(method, s"Undefined property '${method.lexeme}'.")
           case Some(m) => m.bind(obj)
 
       case Expression.This(keyword) => lookupVariable(keyword, expression)

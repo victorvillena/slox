@@ -39,7 +39,7 @@ class Scanner(val source: String):
 
   private def isAlphanumeric(c: Char) = isDigit(c) || isAlpha(c)
 
-  private def addToken(tpe: TokenType, literal: LiteralValue = null) = // GAIN default params avoid overloading
+  private def addToken(tpe: TokenType, literal: LiteralValue = null) =
     val text = source.substring(tokenStartIndex, currentCharIndex)
     tokens += Token(tpe, text, literal, currentLine)
 
@@ -50,10 +50,9 @@ class Scanner(val source: String):
       tokenStartIndex = currentCharIndex
       scanToken()
 
-    tokens += Token(TokenType.Eof, "", null, currentLine) // TODO can Token and TokenType meld into an ADT?
+    tokens += Token(TokenType.Eof, "", null, currentLine)
     tokens.toList
 
-  // TODO idea: this could return either a tokenAdd, or an error. Check if this is the case.
   private def scanToken(): Unit =
     import TokenType.*
     advance match
