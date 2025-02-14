@@ -14,11 +14,13 @@ class Environment(val enclosing: Environment = null):
   // TODO isn't this a generalized 'define'? why a separate 'define'?
   def assignAt(distance: Int, name: Token, value: Any) = ancestor(distance).values.put(name.lexeme, value)
 
-  def get(name: Token): Any =
-    values
-      .get(name.lexeme)
-      .orElse(Option(enclosing).map(_.get(name)))
-      .getOrElse(throw RuntimeError(name, s"Undefined variable '${name.lexeme}'."))
+  @tailrec
+  final def get(name: Token): Any =
+    values.get(name.lexeme) match
+      case Some(value) => value
+      case None =>
+        if enclosing == null then throw RuntimeError(name, s"Undefined variable '${name.lexeme}'.")
+        else enclosing.get(name)
 
   @tailrec
   final def assign(name: Token, value: Any): Unit =
