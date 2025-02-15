@@ -1,5 +1,7 @@
 package org.willena.slox
 
+import scala.annotation.tailrec
+
 class LoxFunction(declaration: Statement.Function, closure: Environment, isInit: Boolean) extends LoxCallable:
 
   def bind(instance: LoxInstance) =
@@ -9,10 +11,15 @@ class LoxFunction(declaration: Statement.Function, closure: Environment, isInit:
 
   override def call(interpreter: Interpreter, arguments: Seq[Any]): Any =
     val environment = Environment(closure)
-    declaration.params
-      .zip(arguments)
-      .map: (param, arg) =>
-        environment.define(param.lexeme, arg)
+
+    @tailrec
+    def defineParams(params: Seq[Token], args: Seq[Any]): Unit =
+      params match
+        case head :: _  =>
+          environment.define(head.lexeme, args.head)
+          defineParams(params.tail, args.tail)
+        case _ => ()
+    defineParams(declaration.params, arguments)
 
     var returnValue: Any = null
     try
