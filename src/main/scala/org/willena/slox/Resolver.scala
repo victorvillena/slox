@@ -20,8 +20,13 @@ class Resolver(val interpreter: Interpreter):
 
   // Helpers ///////////////////////////////////////////////////////////////////
 
-  private def beginScope = scopes.push(mutable.HashMap.empty)
-  private def endScope   = scopes.pop()
+  private def scope(condition: => Boolean = true, action: => Unit = ())(block: => Unit) =
+    if condition then
+      scopes.push(mutable.HashMap.empty)
+      action
+      block
+      scopes.pop()
+    else block
 
   private def declare(name: Token): Unit =
     if scopes.nonEmpty then
@@ -38,10 +43,7 @@ class Resolver(val interpreter: Interpreter):
 
   def resolve(statement: Statement): Unit =
     statement match
-      case Statement.Block(statements) =>
-        beginScope
-        resolve(statements)
-        endScope
+      case Statement.Block(statements) => scope()(resolve(statements))
 
       case Statement.Class(name, superclass, methods) =>
         import ClassType.*
@@ -60,20 +62,13 @@ class Resolver(val interpreter: Interpreter):
           currentClass = Subclass
           resolve(superclass)
 
-        if superclass != null then
-          beginScope
-          scopes.top.put("super", true)
+        scope(superclass != null, scopes.top.put("super", true)):
+          scope():
+            scopes.top.put("this", true)
 
-        beginScope
-        scopes.top.put("this", true)
-
-        methods.foreach: method =>
-          val declaration = if method.name.lexeme == "init" then Initializer else Method
-          resolveFunction(method, declaration)
-
-        endScope
-
-        if superclass != null then endScope
+            methods.foreach: method =>
+              val declaration = if method.name.lexeme == "init" then Initializer else Method
+              resolveFunction(method, declaration)
 
         currentClass = enclosingClass
 
@@ -150,11 +145,10 @@ class Resolver(val interpreter: Interpreter):
     val enclosingFunction = currentFunction
     currentFunction = functionType
 
-    beginScope
-    fun.params.foreach: param =>
-      declare(param)
-      define(param)
-    resolve(fun.body)
-    endScope
+    scope():
+      fun.params.foreach: param =>
+        declare(param)
+        define(param)
+      resolve(fun.body)
 
     currentFunction = enclosingFunction
